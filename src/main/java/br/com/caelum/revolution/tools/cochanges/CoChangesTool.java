@@ -3,7 +3,9 @@ package br.com.caelum.revolution.tools.cochanges;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import br.com.caelum.revolution.builds.BuildResult;
 import br.com.caelum.revolution.domain.Artifact;
@@ -34,10 +36,12 @@ public class CoChangesTool implements Tool, ToolThatPersists {
 		for(int i = begin; i < destinyArtifats.size(); i++) {
 		
 			Artifact destinyArtifact = destinyArtifats.get(i); 
+			
 			CoChangeCount coChangeCount = new CoChangeCount();
-			coChangeCount.setCount(1);
 			coChangeCount.setOrigin(origin.getName());
 			coChangeCount.setDestiny(destinyArtifact.getName());
+			coChangeCount = getCoChange(coChangeCount);
+			coChangeCount.addToCount();
 			
 			coChangesCount.add(coChangeCount);
 		}
@@ -47,6 +51,20 @@ public class CoChangesTool implements Tool, ToolThatPersists {
 		}
 		
 		generateCoChanges(destinyArtifats.get(begin), destinyArtifats, coChangesCount,++begin);
+	}
+
+	private CoChangeCount getCoChange(CoChangeCount coChangeCount) {
+		
+		Criteria criteria = session.createCriteria(CoChangeCount.class);
+		criteria.add(Restrictions.eq("origin", coChangeCount.getOrigin()));
+		criteria.add(Restrictions.eq("destiny", coChangeCount.getDestiny()));
+		
+		CoChangeCount result = (CoChangeCount) criteria.uniqueResult();
+		if(result != null) {
+			coChangeCount = result;
+		}
+		
+		return coChangeCount;
 	}
 
 	public String getName() {

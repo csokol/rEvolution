@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,11 +24,16 @@ public class CoChangesToolTest {
 
 	private CoChangesTool tool;
 	private Session session;
+	private Criteria criteria;
 
 	@Before
 	public void setUp() {
 		tool = new CoChangesTool();
 		session = mock(Session.class);
+		
+		criteria = mock(Criteria.class);
+		
+		when(session.createCriteria(CoChangeCount.class)).thenReturn(criteria);
 		tool.setSession(session);
 	}
 	
@@ -91,6 +98,36 @@ public class CoChangesToolTest {
 		assertEquals(Integer.valueOf(1),coChangesCounts.get(2).getCount());
 		assertEquals("B",coChangesCounts.get(2).getOrigin());
 		assertEquals("C",coChangesCounts.get(2).getDestiny());
+	}
+	
+	
+	@Test
+	public void shouldDoItMan() throws ToolException {
+		
+		CoChangeCount coChangeCount = new CoChangeCount();
+		coChangeCount.setCount(1);
+		coChangeCount.setOrigin("T");
+		coChangeCount.setDestiny("Z");
+		
+		when(criteria.uniqueResult()).thenReturn(coChangeCount);
+		
+		//Given
+		Commit commit1 = new Commit();
+		commit1.addArtifact(new Artifact("T", ArtifactKind.CODE));
+		commit1.addArtifact(new Artifact("Z", ArtifactKind.CODE));
+
+		//When
+		tool.calculate(commit1, new BuildResult("anything"));
+		
+		//Then
+		ArgumentCaptor<CoChangeCount> argument = ArgumentCaptor.forClass(CoChangeCount.class);
+		verify(session).save(argument.capture());
+		
+		CoChangeCount coChangesCount = argument.getValue();
+		
+		assertEquals("T",coChangesCount.getOrigin());
+		assertEquals("Z",coChangesCount.getDestiny());
+		assertEquals(Integer.valueOf(2),coChangesCount.getCount());
 	}
 	
 	

@@ -3,7 +3,7 @@ package br.com.caelum.revolution.tools.cochanges;
 public class CoChangeCount {
 
 	private Integer id;
-	private Integer count;
+	private Integer count = 0;
 	private String destiny;
 	private String origin;
 
@@ -35,4 +35,8 @@ public class CoChangeCount {
 		this.origin = origin;
 	}
 
+	public void addToCount() {
+		count++;
+	}
+	
 }
