@@ -9,7 +9,6 @@ import br.com.caelum.revolution.visualization.common.MapToDataSetConverter;
 public class CumulativeWordInDiffOverTimeFactory implements SpecificVisualizationFactory{
 
 	public Visualization build(Config config) {
-		// new File(config.asString("file")), 1500, 1500, 
 		return new CumulativeWordInDiffOverTimeVisualization(config.asString("name"), 
 				new BarChart("Cumulative Appearance of " + config.asString("name"), "Commits", "Quantity", new MapToDataSetConverter()));
 	}

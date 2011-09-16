@@ -12,7 +12,6 @@ import br.com.caelum.revolution.visualization.common.MapToDataSetConverter;
 public class NumberOfFilesOverTimeFactory implements SpecificVisualizationFactory {
 
 	public Visualization build(Config config) {
-		// new File(config.asString("file")), 3000, 1500, 
 		return new GroupedDataVisualization<BigDecimal>(
 				new LineChart("Number of Files Per Month in Average over Time", "Commit Date", "Number of Files", new MapToDataSetConverter()), 
 				"select convert(concat(month(c.date), '/', year(c.date)), char) name, avg(n.qty) qty from numberoffilespercommit n inner join commit c on n.commit_id = c.id group by month(c.date), year(c.date) order by year(c.date), month(c.date)");

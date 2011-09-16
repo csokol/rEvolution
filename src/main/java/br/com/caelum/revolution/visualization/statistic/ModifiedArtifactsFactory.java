@@ -12,7 +12,6 @@ import br.com.caelum.revolution.visualization.common.ThresholdedGroupedDataVisua
 public class ModifiedArtifactsFactory implements SpecificVisualizationFactory {
 
 	public Visualization build(Config config) {
-		// new File(config.asString("file")), 1500, 1500, 
 		return new ThresholdedGroupedDataVisualization<BigInteger>(
 				new PieChart("Most Modified Artifacts", new MapToDataSetConverter()), 
 				config.asInt("threshold"),

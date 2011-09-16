@@ -6,12 +6,9 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.caelum.revolution.analyzers.AnalyzerFactory;
 import br.com.caelum.revolution.analyzers.AnalyzerRunner;
 import br.com.caelum.revolution.config.Config;
 import br.com.caelum.revolution.config.PropertiesConfig;
-import br.com.caelum.revolution.visualization.VisualizationFactory;
-import br.com.caelum.revolution.visualization.VisualizationRunner;
 
 
 public class Launcher {

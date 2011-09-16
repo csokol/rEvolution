@@ -22,7 +22,6 @@ public class CyclomaticComplexityXModifiedArtifactsFactory implements
 		sql.append("from artifact aa ");
 		sql.append("order by x desc ");
 
-		//new File(config.asString("file")), 1500, 1500
 		return new XYDataVisualization(new ScatterPlot(
 				"Cyclomatic Complexity x Number of Modifications",
 				"Cyclomatic Complexity", "Number of modifications"), sql.toString(),

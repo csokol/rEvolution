@@ -12,7 +12,6 @@ import br.com.caelum.revolution.visualization.common.ThresholdedGroupedDataVisua
 public class BuggedArtifactsFactory implements SpecificVisualizationFactory{
 
 	public Visualization build(Config config) {
-		// 1500 1500 config.asString("file")
 		return new ThresholdedGroupedDataVisualization<BigInteger>(
 				new PieChart("Most Bugged Artifacts", new MapToDataSetConverter()), 
 				config.asInt("threshold"),

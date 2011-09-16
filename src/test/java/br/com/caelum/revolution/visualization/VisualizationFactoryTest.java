@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.revolution.config.Config;
+import br.com.caelum.revolution.gui.commandline.VisualizationFactory;
 
 public class VisualizationFactoryTest {
 
