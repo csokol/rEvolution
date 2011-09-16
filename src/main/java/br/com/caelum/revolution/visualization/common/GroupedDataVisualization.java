@@ -1,5 +1,6 @@
 package br.com.caelum.revolution.visualization.common;
 
+import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +8,12 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
 
-import br.com.caelum.revolution.persistence.VisualizationThatQueries;
 import br.com.caelum.revolution.visualization.Visualization;
 
-public class GroupedDataVisualization<T extends Number> implements Visualization,
-		VisualizationThatQueries {
+public class GroupedDataVisualization<T extends Number> implements Visualization {
 
 	private Session session;
 	private final Chart chart;
@@ -21,15 +22,6 @@ public class GroupedDataVisualization<T extends Number> implements Visualization
 	public GroupedDataVisualization(Chart chart, String sql) {
 		this.chart = chart;
 		this.sql = sql;
-	}
-
-	@SuppressWarnings("unchecked")
-	public void export() {
-		Query query = buildQuery();
-		
-		List<GroupedDataTuple<T>> results = query.list();
-
-		chart.build(convertTo(results));
 	}
 
 	protected Query buildQuery() {
@@ -52,6 +44,23 @@ public class GroupedDataVisualization<T extends Number> implements Visualization
 
 	public void setSession(Session session) {
 		this.session = session;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void exportTo(OutputStream os, int width, int height) {
+		Query query = buildQuery();
+		List<GroupedDataTuple<T>> results = query.list();
+
+		JFreeChart finalChart = chart.build(convertTo(results));
+		
+		try {
+			ChartUtilities.writeChartAsJPEG(os, finalChart, width, height);
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+
 	}
 
 }

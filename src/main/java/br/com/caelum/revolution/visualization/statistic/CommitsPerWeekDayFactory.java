@@ -1,6 +1,5 @@
 package br.com.caelum.revolution.visualization.statistic;
 
-import java.io.File;
 import java.math.BigInteger;
 
 import br.com.caelum.revolution.config.Config;
@@ -14,8 +13,9 @@ public class CommitsPerWeekDayFactory implements SpecificVisualizationFactory {
 
 	public Visualization build(Config config) {
 
+		//  new File(config.asString("file")), 1500, 1500, 
 		return new GroupedDataVisualization<BigInteger>(
-				new BarChart("Commits per Week Day", "Week Days", "Quantity", new File(config.asString("file")), 1500, 1500, new MapToDataSetConverter()),
+				new BarChart("Commits per Week Day", "Week Days", "Quantity", new MapToDataSetConverter()),
 				"select dayname(c.date) name, count(1) qty from commit c group by dayname(c.date) order by dayofweek(c.date)");
 
 	}

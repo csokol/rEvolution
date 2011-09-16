@@ -1,15 +1,16 @@
 package br.com.caelum.revolution.visualization.common;
 
+import java.io.OutputStream;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
 
-import br.com.caelum.revolution.persistence.VisualizationThatQueries;
 import br.com.caelum.revolution.visualization.Visualization;
 
-public class XYDataVisualization implements Visualization,
-		VisualizationThatQueries {
+public class XYDataVisualization implements Visualization {
 
 	private Session session;
 	private final ScatterPlot chart;
@@ -26,9 +27,12 @@ public class XYDataVisualization implements Visualization,
 		this.session = session;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void export() {
+	public String scalar() {
+		return null;
+	}
 
+	@SuppressWarnings("unchecked")
+	public void exportTo(OutputStream os, int width, int height) {
 
 		List<SmallLabeledXYPoint> points = (List<SmallLabeledXYPoint>) session
 				.createSQLQuery(sql)
@@ -36,6 +40,13 @@ public class XYDataVisualization implements Visualization,
 				.setMaxResults(threshold)
 				.list();
 		
-		chart.build(points);
+		JFreeChart finalChart = chart.build(points);
+		
+		try {
+			ChartUtilities.writeChartAsJPEG(os, finalChart, width, height);
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

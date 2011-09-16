@@ -1,6 +1,5 @@
 package br.com.caelum.revolution.visualization.statistic;
 
-import java.io.File;
 import java.math.BigInteger;
 
 import br.com.caelum.revolution.config.Config;
@@ -13,11 +12,11 @@ import br.com.caelum.revolution.visualization.common.ThresholdedGroupedDataVisua
 public class BuggedArtifactsFactory implements SpecificVisualizationFactory{
 
 	public Visualization build(Config config) {
+		// 1500 1500 config.asString("file")
 		return new ThresholdedGroupedDataVisualization<BigInteger>(
-				new PieChart("Most Bugged Artifacts", new File(config.asString("file")), 1500, 1500, new MapToDataSetConverter()), 
+				new PieChart("Most Bugged Artifacts", new MapToDataSetConverter()), 
 				config.asInt("threshold"),
 				"select a.name, count(1) qty from artifact a inner join modification m on m.artifact_id = a.id inner join bugorigin bo on bo.modification_id = m.id group by a.name order by qty desc");
-
 	}
 
 }

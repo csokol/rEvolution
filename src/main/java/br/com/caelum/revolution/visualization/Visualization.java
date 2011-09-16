@@ -1,6 +1,10 @@
 package br.com.caelum.revolution.visualization;
 
-public interface Visualization {
+import java.io.OutputStream;
 
-	void export();
+import org.hibernate.Session;
+
+public interface Visualization {
+	void exportTo(OutputStream os, int width, int height);
+	void setSession(Session session);
 }

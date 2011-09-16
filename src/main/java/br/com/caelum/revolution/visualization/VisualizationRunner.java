@@ -1,10 +1,8 @@
 package br.com.caelum.revolution.visualization;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.caelum.revolution.persistence.HibernatePersistence;
-import br.com.caelum.revolution.persistence.VisualizationThatQueries;
 
 public class VisualizationRunner {
 
@@ -20,21 +18,19 @@ public class VisualizationRunner {
 		return visualizations;
 	}
 
-	private void checkIfItNeedsPersistence(Visualization visualization) {
-		if(visualization instanceof VisualizationThatQueries) {
-			VisualizationThatQueries convertedVisualization = (VisualizationThatQueries) visualization;
-			convertedVisualization.setSession(persistence.getSession());
-		}
+	private void putPersistenceOn(Visualization visualization) {
+			visualization.setSession(persistence.getSession());
 	}
 
 	
 	public void start() {
-		persistence.initMechanism(new ArrayList<Class<?>>());
+		persistence.initMechanism();
 		persistence.openSession();
 		
 		for(Visualization visualization : visualizations) {
-			checkIfItNeedsPersistence(visualization);
-			visualization.export();
+			putPersistenceOn(visualization);
+			// TODO: should provide file, width, and height
+			//visualization.exportTo(file, width, height);
 		}
 		
 		persistence.close();

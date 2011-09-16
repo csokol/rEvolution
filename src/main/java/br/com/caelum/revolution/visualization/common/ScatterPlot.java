@@ -1,11 +1,9 @@
 package br.com.caelum.revolution.visualization.common;
 
-import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
@@ -19,20 +17,14 @@ public class ScatterPlot {
 	private final String yTitle;
 	private final String xTitle;
 	private final String title;
-	private final File file;
-	private final int height;
-	private final int width;
 	
-	public ScatterPlot(String title, String xTitle, String yTitle, File file, int width, int height) {
+	public ScatterPlot(String title, String xTitle, String yTitle) {
 		this.title = title;
 		this.xTitle = xTitle;
 		this.yTitle = yTitle;
-		this.file = file;
-		this.width = width;
-		this.height = height;
 	}
 	
-	public void build(List<? extends XYPoint> points) {
+	public JFreeChart build(List<? extends XYPoint> points) {
 		JFreeChart chart = ChartFactory.createScatterPlot(title, xTitle, yTitle, createDataSet(points), PlotOrientation.VERTICAL, true, false, false);
 		
 		NumberFormat format = NumberFormat.getNumberInstance();
@@ -42,12 +34,7 @@ public class ScatterPlot {
 		chart.getXYPlot().getRenderer().setBaseItemLabelsVisible(true);
 		chart.getXYPlot().getRenderer().setBaseItemLabelGenerator(generator);
 		
-		try {
-			ChartUtilities.saveChartAsJPEG(file, chart, width, height);
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
+		return chart;
 
 	}
 

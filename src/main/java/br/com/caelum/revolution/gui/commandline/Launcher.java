@@ -1,4 +1,4 @@
-package br.com.caelum.revolution;
+package br.com.caelum.revolution.gui.commandline;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

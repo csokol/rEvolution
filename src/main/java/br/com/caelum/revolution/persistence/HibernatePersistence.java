@@ -1,6 +1,7 @@
 package br.com.caelum.revolution.persistence;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -97,6 +98,10 @@ public class HibernatePersistence {
 		if(session!=null) {
 			session.close();
 		}
+	}
+
+	public void initMechanism() {
+		initMechanism(new ArrayList<Class<?>>());
 	}
 	
 }

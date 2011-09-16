@@ -2,6 +2,8 @@ package br.com.caelum.revolution.visualization.common;
 
 import java.util.Map;
 
+import org.jfree.chart.JFreeChart;
+
 public interface Chart {
-	void build(Map<Object, Double> data);
+	JFreeChart build(Map<Object, Double> data);
 }

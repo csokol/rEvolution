@@ -34,5 +34,6 @@
 	<classpathentry kind="lib" path="lib/jcommon.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart.jar"/>
 	<classpathentry kind="lib" path="lib/ant.jar"/>
+	<classpathentry kind="lib" path="lib/scannotation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
