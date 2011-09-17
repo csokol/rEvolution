@@ -49,10 +49,11 @@ public class MainUI extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 
 				MapConfig config = databaseConfig.configBasedOnInput(
-						host.getText(), schema.getText(),
-						user.getText(), password.getText(), false);
+						host.getText(), schema.getText(), user.getText(),
+						password.getText(), false);
 
-				new VisualizationsUI(config, new ClassScan()).setVisible(true);
+				new VisualizationsUI(config, new ClassScan(),
+						new StringsToDataArrayConverter()).setVisible(true);
 				setVisible(false);
 			}
 
@@ -63,11 +64,11 @@ public class MainUI extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 
 				MapConfig config = databaseConfig.configBasedOnInput(
-						host.getText(), schema.getText(),
-						user.getText(), password.getText(), true);
+						host.getText(), schema.getText(), user.getText(),
+						password.getText(), true);
 
-				new CrawlerUI(config, new ClassScan())
-						.setVisible(true);
+				new CrawlerUI(config, new ClassScan(),
+						new StringsToDataArrayConverter()).setVisible(true);
 				setVisible(false);
 			}
 		});

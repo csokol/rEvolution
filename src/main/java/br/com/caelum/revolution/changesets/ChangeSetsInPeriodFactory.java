@@ -4,9 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import br.com.caelum.revolution.config.Config;
+import br.com.caelum.revolution.config.IsChangeSet;
 import br.com.caelum.revolution.scm.SCM;
 
-
+@IsChangeSet(name="Changesets in Period", configs={"changesets.all.startPeriod", "changesets.all.endPeriod"})
 public class ChangeSetsInPeriodFactory implements SpecificChangeSetFactory {
 
 	private final SimpleDateFormat sdf;

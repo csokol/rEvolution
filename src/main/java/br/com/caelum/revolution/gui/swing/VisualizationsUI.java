@@ -44,12 +44,14 @@ public class VisualizationsUI extends JFrame {
 	private Config config;
 	private HibernatePersistence persistence;
 	private final ClassScan scan;
+	private final StringsToDataArrayConverter configConverter;
 
-	public VisualizationsUI(Config config, ClassScan scan) {
+	public VisualizationsUI(Config config, ClassScan scan, StringsToDataArrayConverter configConverter) {
 		
 		super("rEvolution");
 		this.config = config;
 		this.scan = scan;
+		this.configConverter = configConverter;
 		
 		contentPane = new JPanel(new BorderLayout());
 		this.setContentPane(contentPane);
@@ -61,9 +63,9 @@ public class VisualizationsUI extends JFrame {
 		createToolBar();
 		createPanels();
 
+		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		pack();
 	}
 
 	private void loadPersistence() {
@@ -95,7 +97,7 @@ public class VisualizationsUI extends JFrame {
 		final JButton visualize = new JButton("Generate");
 		panel.add(visualize, BorderLayout.SOUTH);
 		
-		String[][] data = transformConfigNamesToJTableDataObject(configs);
+		String[][] data = configConverter.transformConfigNamesToJTableDataObject(configs);
 		final JTable configTable = new JTable(data, new String[] {"Property", "Value"});
 		panel.add(configTable, BorderLayout.NORTH);
 
@@ -127,14 +129,6 @@ public class VisualizationsUI extends JFrame {
 		});
 		return panel;
 		
-	}
-
-	private String[][] transformConfigNamesToJTableDataObject(String[] configs) {
-		String[][] data = new String[configs.length][2];
-		for(int i = 0; i < configs.length; i++) {
-			data[i][0] = configs[i];
-		}
-		return data;
 	}
 
 	private MapConfig createConfigBasedOn(JTable configTable) {

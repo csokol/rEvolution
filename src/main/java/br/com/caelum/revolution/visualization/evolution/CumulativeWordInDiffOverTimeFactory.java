@@ -7,14 +7,14 @@ import br.com.caelum.revolution.visualization.Visualization;
 import br.com.caelum.revolution.visualization.common.BarChart;
 import br.com.caelum.revolution.visualization.common.MapToDataSetConverter;
 
-@IsVisualization(name = "Cumulative Word in Diff", configs = { "word" })
+@IsVisualization(name = "Cumulative Word in Diff", configs = { "name" })
 public class CumulativeWordInDiffOverTimeFactory implements
 		SpecificVisualizationFactory {
 
 	public Visualization build(Config config) {
 		return new CumulativeWordInDiffOverTimeVisualization(
-				config.asString("word"), new BarChart(
-						"Cumulative Appearance of " + config.asString("word"),
+				config.asString("name"), new BarChart(
+						"Cumulative Appearance of " + config.asString("name"),
 						"Commits", "Quantity", new MapToDataSetConverter()));
 	}
 
