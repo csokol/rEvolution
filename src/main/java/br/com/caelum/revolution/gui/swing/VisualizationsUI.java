@@ -22,14 +22,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
 
 import br.com.caelum.revolution.config.Config;
 import br.com.caelum.revolution.config.IsVisualization;
@@ -194,7 +192,6 @@ public class VisualizationsUI extends JFrame {
 		JButton button = new JButton();
 		button.setActionCommand(actionCommand);
 		button.setToolTipText(toolTipText);
-		// button.addActionListener(this);
 
 		button.setText(altText);
 
@@ -204,20 +201,9 @@ public class VisualizationsUI extends JFrame {
 	private void createMenus() {
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu rEvolutionMenu = new JMenu("rEvolution");
-		rEvolutionMenu.setMnemonic(KeyEvent.VK_R);
-		JMenuItem newProjectItem = new JMenuItem("New", KeyEvent.VK_N);
-		newProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-		rEvolutionMenu.add(newProjectItem);
-
-		JMenuItem openProjectItem = new JMenuItem("Open", KeyEvent.VK_O);
-		openProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-		rEvolutionMenu.add(openProjectItem);
-
 		JMenu aboutMenu = new JMenu("About");
 		aboutMenu.setMnemonic(KeyEvent.VK_A);
 
-		menuBar.add(rEvolutionMenu);
 		menuBar.add(aboutMenu);
 
 		this.setJMenuBar(menuBar);
