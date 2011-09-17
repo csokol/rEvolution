@@ -18,7 +18,7 @@ import br.com.caelum.revolution.config.DatabaseConfigTemplate;
 import br.com.caelum.revolution.config.MapConfig;
 import br.com.caelum.revolution.scanner.ClassScan;
 
-public class ConfigUI extends JFrame {
+public class MainUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField host;
@@ -29,7 +29,7 @@ public class ConfigUI extends JFrame {
 	private JTextField schema;
 	private DatabaseConfigTemplate databaseConfig;
 
-	public ConfigUI() {
+	public MainUI() {
 		super("rEvolution");
 		setLayout(new BorderLayout());
 		databaseConfig = new DatabaseConfigTemplate();
@@ -79,14 +79,14 @@ public class ConfigUI extends JFrame {
 			UnsupportedLookAndFeelException {
 		UIManager.setLookAndFeel(UIManager
 				.getCrossPlatformLookAndFeelClassName());
-		new ConfigUI().setVisible(true);
+		new MainUI().setVisible(true);
 	}
 
 	private void createButtons() {
 		JPanel panel = new JPanel();
 
-		crawl = new JButton("Crawl the repository");
-		visualize = new JButton("Visualize the repository");
+		crawl = new JButton("Yes, crawl the repo!");
+		visualize = new JButton("No, only visualize it!");
 
 		panel.add(crawl);
 		panel.add(visualize);

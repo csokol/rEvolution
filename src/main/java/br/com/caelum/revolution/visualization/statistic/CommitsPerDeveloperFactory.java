@@ -10,7 +10,7 @@ import br.com.caelum.revolution.visualization.common.MapToDataSetConverter;
 import br.com.caelum.revolution.visualization.common.PieChart;
 import br.com.caelum.revolution.visualization.common.ThresholdedGroupedDataVisualization;
 
-@IsVisualization(name="Committers", configs={"threshold"})
+@IsVisualization(name="Commits Per Developer", configs={"threshold"})
 public class CommitsPerDeveloperFactory implements SpecificVisualizationFactory {
 
 	public Visualization build(Config config) {

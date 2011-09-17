@@ -1,11 +1,13 @@
 package br.com.caelum.revolution.visualization.evolution;
 
 import br.com.caelum.revolution.config.Config;
+import br.com.caelum.revolution.config.IsVisualization;
 import br.com.caelum.revolution.visualization.SpecificVisualizationFactory;
 import br.com.caelum.revolution.visualization.Visualization;
 import br.com.caelum.revolution.visualization.common.ScatterPlot;
 import br.com.caelum.revolution.visualization.common.XYDataVisualization;
 
+@IsVisualization(name="Modified Artifacts x Bugged Artifacts", configs={"threshold"})
 public class ModifiedArtifactsXBuggedArtifactsFactory implements
 		SpecificVisualizationFactory {
 

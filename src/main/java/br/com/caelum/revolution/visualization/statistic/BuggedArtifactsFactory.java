@@ -3,12 +3,14 @@ package br.com.caelum.revolution.visualization.statistic;
 import java.math.BigInteger;
 
 import br.com.caelum.revolution.config.Config;
+import br.com.caelum.revolution.config.IsVisualization;
 import br.com.caelum.revolution.visualization.SpecificVisualizationFactory;
 import br.com.caelum.revolution.visualization.Visualization;
 import br.com.caelum.revolution.visualization.common.MapToDataSetConverter;
 import br.com.caelum.revolution.visualization.common.PieChart;
 import br.com.caelum.revolution.visualization.common.ThresholdedGroupedDataVisualization;
 
+@IsVisualization(name="Bugged Artifacts", configs={"threshold"})
 public class BuggedArtifactsFactory implements SpecificVisualizationFactory{
 
 	public Visualization build(Config config) {
