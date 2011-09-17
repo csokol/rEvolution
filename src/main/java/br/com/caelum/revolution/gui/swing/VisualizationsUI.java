@@ -8,9 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,7 +116,6 @@ public class VisualizationsUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				Config extendedCfgs = createConfigBasedOn(configTable);
 				
-				try {
 					JFileChooser fc = new JFileChooser();
 					int result = fc.showSaveDialog(null);
 					
@@ -126,11 +123,6 @@ public class VisualizationsUI extends JFrame {
 						exportVisualization(fc.getSelectedFile(), clazz, panel, extendedCfgs);
 						JOptionPane.showMessageDialog(null, "Visualization exported successfully!");
 					}
-					
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-				
 			}
 		});
 		
@@ -155,26 +147,26 @@ public class VisualizationsUI extends JFrame {
 					throw new RuntimeException(e);
 				}
 			}
-
 		});
 		return panel;
 		
 	}
 	
-	private void exportVisualization(File file, final Class<?> clazz,
-			final JPanel panel, Config extendedCfgs)
-			throws FileNotFoundException, InstantiationException,
-			IllegalAccessException, IOException {
-		OutputStream pout = new FileOutputStream(file);
-
-		SpecificVisualizationFactory factory = (SpecificVisualizationFactory)clazz.newInstance(); 
-		Visualization visualization = factory.build(new TwoConfigs(config, extendedCfgs));
-		visualization.setSession(persistence.getSession());
-		visualization.exportTo(pout, 1000, 1000);
+	private void exportVisualization(File file, final Class<?> clazz, final JPanel panel, Config extendedCfgs) {
 		
-		Component c = ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
-		if(c!=null) panel.remove(c);
-		
+		try {
+			OutputStream pout = new FileOutputStream(file);
+	
+			SpecificVisualizationFactory factory = (SpecificVisualizationFactory)clazz.newInstance(); 
+			Visualization visualization = factory.build(new TwoConfigs(config, extendedCfgs));
+			visualization.setSession(persistence.getSession());
+			visualization.exportTo(pout, 1000, 1000);
+			
+			Component c = ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+			if(c!=null) panel.remove(c);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private MapConfig createConfigBasedOn(JTable configTable) {
