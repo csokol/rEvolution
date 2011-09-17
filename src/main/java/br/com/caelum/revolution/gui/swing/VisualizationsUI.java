@@ -2,12 +2,15 @@ package br.com.caelum.revolution.gui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +19,13 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -97,12 +102,38 @@ public class VisualizationsUI extends JFrame {
 	private JPanel createPanel(final Class<?> clazz, String[] configs) {
 		final JPanel panel = new JPanel(new BorderLayout());
 		final JButton visualize = new JButton("Generate");
-		panel.add(visualize, BorderLayout.SOUTH);
+		final JButton export = new JButton("Export");
+		
+		JPanel buttons = new JPanel(new FlowLayout());
+		buttons.add(visualize);
+		buttons.add(export);
+		panel.add(buttons, BorderLayout.SOUTH);
 		
 		String[][] data = configConverter.transformConfigNamesToJTableDataObject(configs);
 		final JTable configTable = new JTable(data, new String[] {"Property", "Value"});
 		panel.add(configTable, BorderLayout.NORTH);
 
+		export.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				Config extendedCfgs = createConfigBasedOn(configTable);
+				
+				try {
+					JFileChooser fc = new JFileChooser();
+					int result = fc.showSaveDialog(null);
+					
+					if(result == JFileChooser.APPROVE_OPTION) {
+						exportVisualization(fc.getSelectedFile(), clazz, panel, extendedCfgs);
+						JOptionPane.showMessageDialog(null, "Visualization exported successfully!");
+					}
+					
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				
+			}
+		});
+		
 		visualize.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent ae) {
@@ -110,17 +141,9 @@ public class VisualizationsUI extends JFrame {
 				Config extendedCfgs = createConfigBasedOn(configTable);
 				
 				try {
-					OutputStream pout = new FileOutputStream(new File("temp.jpg"));
+					exportVisualization(new File("temp"), clazz, panel, extendedCfgs);
+					BufferedImage image = ImageIO.read(new File("temp"));
 
-					SpecificVisualizationFactory factory = (SpecificVisualizationFactory)clazz.newInstance(); 
-					Visualization visualization = factory.build(new TwoConfigs(config, extendedCfgs));
-					visualization.setSession(persistence.getSession());
-					visualization.exportTo(pout, 1000, 1000);
-					
-					Component c = ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
-					if(c!=null) panel.remove(c);
-					
-					BufferedImage image = ImageIO.read(new File("temp.jpg"));
 					
 					JLabel picture = new JLabel(new ImageIcon(image));
 					Component scrolledPicture = new JScrollPane(picture);
@@ -135,6 +158,22 @@ public class VisualizationsUI extends JFrame {
 
 		});
 		return panel;
+		
+	}
+	
+	private void exportVisualization(File file, final Class<?> clazz,
+			final JPanel panel, Config extendedCfgs)
+			throws FileNotFoundException, InstantiationException,
+			IllegalAccessException, IOException {
+		OutputStream pout = new FileOutputStream(file);
+
+		SpecificVisualizationFactory factory = (SpecificVisualizationFactory)clazz.newInstance(); 
+		Visualization visualization = factory.build(new TwoConfigs(config, extendedCfgs));
+		visualization.setSession(persistence.getSession());
+		visualization.exportTo(pout, 1000, 1000);
+		
+		Component c = ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+		if(c!=null) panel.remove(c);
 		
 	}
 
