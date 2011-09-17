@@ -176,13 +176,11 @@ public class VisualizationsUI extends JFrame {
 		JMenu rEvolutionMenu = new JMenu("rEvolution");
 		rEvolutionMenu.setMnemonic(KeyEvent.VK_R);
 		JMenuItem newProjectItem = new JMenuItem("New", KeyEvent.VK_N);
-		newProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
-				ActionEvent.CTRL_MASK));
+		newProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		rEvolutionMenu.add(newProjectItem);
 
 		JMenuItem openProjectItem = new JMenuItem("Open", KeyEvent.VK_O);
-		openProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
-				ActionEvent.CTRL_MASK));
+		openProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		rEvolutionMenu.add(openProjectItem);
 
 		JMenu aboutMenu = new JMenu("About");
