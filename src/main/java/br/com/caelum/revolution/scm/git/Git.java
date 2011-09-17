@@ -12,7 +12,6 @@ import br.com.caelum.revolution.scm.SCMException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-
 public class Git implements SCM {
 
 	private final String repository;

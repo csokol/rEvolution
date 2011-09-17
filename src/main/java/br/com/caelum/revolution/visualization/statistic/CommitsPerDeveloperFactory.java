@@ -21,7 +21,8 @@ import javax.swing.JTextField;
 import org.hibernate.Session;
 
 import br.com.caelum.revolution.config.Config;
-import br.com.caelum.revolution.config.ExtendedConfig;
+import br.com.caelum.revolution.config.MapConfig;
+import br.com.caelum.revolution.config.TwoConfigs;
 import br.com.caelum.revolution.gui.swing.UX;
 import br.com.caelum.revolution.gui.swing.VisualizationHasUI;
 import br.com.caelum.revolution.visualization.SpecificVisualizationFactory;
@@ -58,7 +59,7 @@ public class CommitsPerDeveloperFactory implements SpecificVisualizationFactory,
 				try {
 					OutputStream pout = new FileOutputStream(new File("temp"));
 
-					Visualization visualization = build(new ExtendedConfig(config, extendedCfgs));
+					Visualization visualization = build(new TwoConfigs(config, new MapConfig(extendedCfgs)));
 					visualization.setSession(session);
 					visualization.exportTo(pout, 1000, 1000);
 					
