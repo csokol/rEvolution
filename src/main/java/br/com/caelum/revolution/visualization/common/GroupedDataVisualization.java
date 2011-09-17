@@ -31,7 +31,7 @@ public class GroupedDataVisualization<T extends Number> implements Visualization
 		return query;
 	}
 
-	private Map<Object, Double> convertTo(List<GroupedDataTuple<T>> results) {
+	protected Map<Object, Double> convertTo(List<GroupedDataTuple<T>> results) {
 
 		Map<Object, Double> map = new LinkedHashMap<Object, Double>();
 
