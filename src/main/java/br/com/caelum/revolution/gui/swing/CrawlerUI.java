@@ -182,6 +182,12 @@ public class CrawlerUI extends JFrame {
 		changeSetsTable = new JTable();
 		panel.add(changeSetsTable, BorderLayout.CENTER);
 
+		putClickActionOnChangeSetsComboBox(panel);
+
+		return panel;
+	}
+
+	private void putClickActionOnChangeSetsComboBox(final JPanel panel) {
 		changeSets.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
@@ -205,8 +211,6 @@ public class CrawlerUI extends JFrame {
 				panel.repaint();
 			}
 		});
-
-		return panel;
 	}
 
 	private Component createBuilds() {
@@ -237,6 +241,12 @@ public class CrawlerUI extends JFrame {
 		buildsTable = new JTable();
 		panel.add(buildsTable, BorderLayout.CENTER);
 
+		putClickActionOnBuildComboBox(panel);
+
+		return panel;
+	}
+
+	private void putClickActionOnBuildComboBox(final JPanel panel) {
 		builds.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
@@ -260,8 +270,6 @@ public class CrawlerUI extends JFrame {
 				panel.repaint();
 			}
 		});
-
-		return panel;
 	}
 	
 	private Component createTools() {
@@ -322,6 +330,12 @@ public class CrawlerUI extends JFrame {
 		panel.add(scmTable, BorderLayout.CENTER);
 
 		
+		putClickActionOnSCMComboBox(panel);
+
+		return panel;
+	}
+
+	private void putClickActionOnSCMComboBox(final JPanel panel) {
 		scm.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
@@ -344,7 +358,5 @@ public class CrawlerUI extends JFrame {
 				panel.repaint();
 			}
 		});
-
-		return panel;
 	}
 }
