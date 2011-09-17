@@ -3,9 +3,9 @@ package br.com.caelum.revolution.config;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseConfig {
+public class DatabaseConfigTemplate {
 
-	public MapConfig configBasedOnInput(String host, String schema, String user, String password) {
+	public MapConfig configBasedOnInput(String host, String schema, String user, String password, boolean createTables) {
 		Map<String, String> cfgs = new HashMap<String, String>();
 
 		cfgs.put("driver_class", "com.mysql.jdbc.Driver");
@@ -15,7 +15,7 @@ public class DatabaseConfig {
 		cfgs.put("dialect", "org.hibernate.dialect.MySQLInnoDBDialect");
 		cfgs.put("db_user", user);
 		cfgs.put("db_pwd", password);
-		cfgs.put("create_tables", "false");
+		cfgs.put("create_tables", String.valueOf(createTables));
 
 		MapConfig config = new MapConfig(cfgs);
 		return config;
