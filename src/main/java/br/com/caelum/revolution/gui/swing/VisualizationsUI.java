@@ -106,14 +106,14 @@ public class VisualizationsUI extends JFrame {
 				Config extendedCfgs = createConfigBasedOn(configTable);
 				
 				try {
-					OutputStream pout = new FileOutputStream(new File("/Users/mauricioaniche/dev/workspace/rEvolution/dist/temp.jpg"));
+					OutputStream pout = new FileOutputStream(new File("temp.jpg"));
 
 					SpecificVisualizationFactory factory = (SpecificVisualizationFactory)clazz.newInstance(); 
 					Visualization visualization = factory.build(new TwoConfigs(config, extendedCfgs));
 					visualization.setSession(persistence.getSession());
 					visualization.exportTo(pout, 1000, 1000);
 					
-					BufferedImage image = ImageIO.read(new File("/Users/mauricioaniche/dev/workspace/rEvolution/dist/temp.jpg"));
+					BufferedImage image = ImageIO.read(new File("temp.jpg"));
 					JLabel picture = new JLabel(new ImageIcon(image));
 					panel.add(picture, BorderLayout.CENTER);
 					
