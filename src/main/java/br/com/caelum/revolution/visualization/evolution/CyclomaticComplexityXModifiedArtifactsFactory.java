@@ -16,7 +16,7 @@ public class CyclomaticComplexityXModifiedArtifactsFactory implements
 		StringBuilder sql = new StringBuilder();
 		sql.append("select a.name label, ");
 		sql.append("convert( ");
-		sql.append("(select cc from cyclomaticcomplexity where artifact_id = aa.id and commit_id=(select id from commit order by date desc limit 0,1)) ");
+		sql.append("(select cc from cyclomaticcomplexity where artifact_id = aa.id and commit_id=(select id from commit order by date desc limit 0,1) ");
 		sql.append("), decimal(10,2)) x, ");
 		sql.append("convert( ");
 		sql.append("(select count(1) from artifact a inner join modification m on m.artifact_id = a.id ");
