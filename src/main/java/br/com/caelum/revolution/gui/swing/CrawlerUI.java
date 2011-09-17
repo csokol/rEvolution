@@ -20,11 +20,15 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import br.com.caelum.revolution.analyzers.AnalyzerRunner;
 import br.com.caelum.revolution.config.Config;
 import br.com.caelum.revolution.config.IsBuild;
 import br.com.caelum.revolution.config.IsChangeSet;
 import br.com.caelum.revolution.config.IsSCM;
 import br.com.caelum.revolution.config.IsTool;
+import br.com.caelum.revolution.config.MapConfig;
+import br.com.caelum.revolution.config.TwoConfigs;
+import br.com.caelum.revolution.gui.commandline.AnalyzerFactory;
 import br.com.caelum.revolution.scanner.ClassScan;
 
 public class CrawlerUI extends JFrame {
@@ -57,12 +61,12 @@ public class CrawlerUI extends JFrame {
 		this.configConverter = configConverter;
 		allSCMs = new HashMap<String, Class<?>>();
 		allChangeSets = new HashMap<String, Class<?>>();
+		allBuilds = new HashMap<String, Class<?>>();
 		allTools = new HashMap<Class<?>, JPanel>();
 
 		setLayout(new BorderLayout());
 
 		createTabs();
-
 		createButtons();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,6 +77,70 @@ public class CrawlerUI extends JFrame {
 	private void createButtons() {
 		JButton crawl = new JButton("Crawl!");
 		add(crawl, BorderLayout.SOUTH);
+		
+		crawl.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				Map<String, String> cfgs = new HashMap<String, String>();
+				
+				putSCMOn(cfgs);
+				putChangeSetsOn(cfgs);
+				putBuildOn(cfgs);
+				putToolsOn(cfgs);
+				
+				AnalyzerRunner analyzerRunner = new AnalyzerFactory().basedOn(new TwoConfigs(config, new MapConfig(cfgs)));
+				analyzerRunner.start();
+			}
+
+			private void putToolsOn(Map<String, String> cfgs) {
+				
+				int i = 1;
+				for(Map.Entry<Class<?>, JPanel> e : allTools.entrySet()){
+					JPanel panel = e.getValue();
+					JCheckBox ok = (JCheckBox) ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.NORTH);
+					
+					cfgs.put("tools.1", e.getKey().getName());
+					
+					if(ok.isSelected()) {
+						JTable table = (JTable) ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+						getConfigsFromTable("tools.1.", cfgs, table);
+						i++;
+					}
+				}
+			}
+
+			private void putChangeSetsOn(Map<String, String> cfgs) {
+				String changeSetName = (String) changeSets.getSelectedItem();
+				Class<?> changeSetClazz = allChangeSets.get(changeSetName);
+				cfgs.put("changesets", changeSetClazz.getName());
+				getConfigsFromTable(cfgs, changeSetsTable);
+			}
+			
+			private void putBuildOn(Map<String, String> cfgs) {
+				String buildName = (String) builds.getSelectedItem();
+				Class<?> buildClazz = allBuilds.get(buildName);
+				cfgs.put("build", buildClazz.getName());
+				getConfigsFromTable(cfgs, buildsTable);
+			}
+			
+			private void putSCMOn(Map<String, String> cfgs) {
+				String scmName = (String) scm.getSelectedItem();
+				Class<?> scmClazz = allSCMs.get(scmName);
+				cfgs.put("scm", scmClazz.getName());
+				getConfigsFromTable(cfgs, scmTable);
+			}
+
+		});
+	}
+
+	private void getConfigsFromTable(String prefix, Map<String, String> cfgs, JTable table) {
+		for(int i = 0; i < table.getRowCount(); i++){
+			cfgs.put(prefix + (String)table.getValueAt(i, 0),(String)table.getValueAt(i, 1));
+		}
+	}
+	
+	private void getConfigsFromTable(Map<String, String> cfgs, JTable table) {
+		getConfigsFromTable("", cfgs, table);
 	}
 
 	private void createTabs() {
@@ -151,7 +219,7 @@ public class CrawlerUI extends JFrame {
 				Class<?> clazz = Class.forName(clazzName);
 				IsBuild buildDetails = clazz.getAnnotation(IsBuild.class);
 				names.add(buildDetails.name());
-				allChangeSets.put(buildDetails.name(), clazz);
+				allBuilds.put(buildDetails.name(), clazz);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -175,7 +243,7 @@ public class CrawlerUI extends JFrame {
 				JComboBox cb = (JComboBox) ae.getSource();
 				if (cb.getSelectedIndex() > 0) {
 					String selectedBuild = (String) cb.getSelectedItem();
-					IsBuild buildDetails = (IsBuild) allChangeSets.get(selectedBuild).getAnnotation(IsBuild.class);
+					IsBuild buildDetails = (IsBuild) allBuilds.get(selectedBuild).getAnnotation(IsBuild.class);
 					
 					replaceWithNewBuildConfigs(panel, buildDetails);
 				}
