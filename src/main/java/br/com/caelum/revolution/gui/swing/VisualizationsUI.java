@@ -1,6 +1,7 @@
 package br.com.caelum.revolution.gui.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
@@ -115,9 +117,14 @@ public class VisualizationsUI extends JFrame {
 					visualization.setSession(persistence.getSession());
 					visualization.exportTo(pout, 1000, 1000);
 					
+					Component c = ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+					if(c!=null) panel.remove(c);
+					
 					BufferedImage image = ImageIO.read(new File("temp.jpg"));
+					
 					JLabel picture = new JLabel(new ImageIcon(image));
-					panel.add(picture, BorderLayout.CENTER);
+					Component scrolledPicture = new JScrollPane(picture);
+					panel.add(scrolledPicture, BorderLayout.CENTER);
 					
 					panel.revalidate();
 					panel.repaint();
