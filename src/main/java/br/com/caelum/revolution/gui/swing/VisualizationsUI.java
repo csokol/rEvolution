@@ -22,11 +22,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import br.com.caelum.revolution.config.Config;
@@ -48,6 +50,8 @@ public class VisualizationsUI extends JFrame {
 	private HibernatePersistence persistence;
 	private final ClassScan scan;
 	private final StringsToDataArrayConverter configConverter;
+	private JTextField width;
+	private JTextField height;
 
 	public VisualizationsUI(Config config, ClassScan scan, StringsToDataArrayConverter configConverter) {
 		
@@ -158,7 +162,7 @@ public class VisualizationsUI extends JFrame {
 			SpecificVisualizationFactory factory = (SpecificVisualizationFactory)clazz.newInstance(); 
 			Visualization visualization = factory.build(new TwoConfigs(config, extendedCfgs));
 			visualization.setSession(persistence.getSession());
-			visualization.exportTo(pout, 1000, 1000);
+			visualization.exportTo(pout, Integer.valueOf(width.getText()), Integer.valueOf(height.getText()));
 			
 			Component c = ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
 			if(c!=null) panel.remove(c);
@@ -179,32 +183,38 @@ public class VisualizationsUI extends JFrame {
 
 	
 	private void createToolBar() {
-		toolBar = new JToolBar("Bla");
+		toolBar = new JToolBar();
 
-		toolBar.add(createButton("v1", "tooltip", "name1"));
-		toolBar.add(createButton("v2", "tooltip", "name2"));
-		toolBar.add(createButton("v3", "tooltip", "name3"));
+		
+		toolBar.add(new JLabel("Width:"));
+		width = new JTextField();
+		width.setText("1000");
+		toolBar.add(width);
+		
+		toolBar.add(new JLabel("Height:"));
+		height = new JTextField();
+		height.setText("1000");
+		toolBar.add(height);
+		
 		contentPane.add(toolBar, BorderLayout.PAGE_START);
-	}
-
-	protected JButton createButton(String actionCommand, String toolTipText,
-			String altText) {
-		JButton button = new JButton();
-		button.setActionCommand(actionCommand);
-		button.setToolTipText(toolTipText);
-
-		button.setText(altText);
-
-		return button;
 	}
 
 	private void createMenus() {
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu aboutMenu = new JMenu("About");
-		aboutMenu.setMnemonic(KeyEvent.VK_A);
+		JMenu revolutionMenu = new JMenu("rEvolution");
+		revolutionMenu.setMnemonic(KeyEvent.VK_R);
+		
+		JMenuItem about = new JMenuItem("About");
+		revolutionMenu.add(about);
 
-		menuBar.add(aboutMenu);
+		menuBar.add(revolutionMenu);
+		
+		about.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "rEvolution\nCreated By Mauricio Aniche (mauricioaniche@gmail.com)\nhttp://www.github.com/mauricioaniche/rEvolution");
+			}
+		});
 
 		this.setJMenuBar(menuBar);
 	}
