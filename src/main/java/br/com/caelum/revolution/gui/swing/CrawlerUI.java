@@ -99,11 +99,10 @@ public class CrawlerUI extends JFrame {
 					JPanel panel = e.getValue();
 					JCheckBox ok = (JCheckBox) ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.NORTH);
 					
-					cfgs.put("tools.1", e.getKey().getName());
-					
 					if(ok.isSelected()) {
+						cfgs.put("tools." + i, e.getKey().getName());
 						JTable table = (JTable) ((BorderLayout)panel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
-						getConfigsFromTable("tools.1.", cfgs, table);
+						getConfigsFromTable("tools."+ i +".", cfgs, table);
 						i++;
 					}
 				}
