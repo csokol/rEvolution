@@ -3,8 +3,7 @@ package br.com.caelum.revolution.analyzers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import br.com.caelum.revolution.builds.Build;
 import br.com.caelum.revolution.builds.BuildResult;
@@ -26,7 +25,7 @@ public class DefaultAnalyzer implements Analyzer {
 	private final List<Tool> tools;
 	private final SCM scm;
 	private final HibernatePersistence persistence;
-	private static Logger log = LoggerFactory.getLogger(DefaultAnalyzer.class);
+	private static Logger log = Logger.getLogger(DefaultAnalyzer.class);
 	private final PersistedCommitConverter convert;
 
 	public DefaultAnalyzer(SCM scm, Build build, List<Tool> tools,

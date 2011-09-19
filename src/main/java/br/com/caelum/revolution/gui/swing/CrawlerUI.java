@@ -2,7 +2,6 @@ package br.com.caelum.revolution.gui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -70,8 +70,8 @@ public class CrawlerUI extends JFrame {
 		createButtons();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setPreferredSize(new Dimension(700, 450));
 		pack();
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 
 	private void createButtons() {
@@ -80,16 +80,25 @@ public class CrawlerUI extends JFrame {
 		
 		crawl.addActionListener(new ActionListener() {
 			
-			public void actionPerformed(ActionEvent arg0) {
-				Map<String, String> cfgs = new HashMap<String, String>();
+			public void actionPerformed(ActionEvent ae) {
+				final Map<String, String> cfgs = new HashMap<String, String>();
 				
 				putSCMOn(cfgs);
 				putChangeSetsOn(cfgs);
 				putBuildOn(cfgs);
 				putToolsOn(cfgs);
 				
-				AnalyzerRunner analyzerRunner = new AnalyzerFactory().basedOn(new TwoConfigs(config, new MapConfig(cfgs)));
-				analyzerRunner.start();
+				LogUI log = new LogUI();
+				log.setVisible(true);
+				
+				JOptionPane.showMessageDialog(null, "The process is about to start. It may take a while... ;)");
+				
+				new Thread(new Runnable() {
+					public void run() {
+						AnalyzerRunner analyzerRunner = new AnalyzerFactory().basedOn(new TwoConfigs(config, new MapConfig(cfgs)));
+						analyzerRunner.start();
+					}
+				}).start();
 			}
 
 			private void putToolsOn(Map<String, String> cfgs) {
