@@ -38,6 +38,7 @@ public class LogUI extends JFrame {
 
 	private void createTextArea() {
 		logArea = new JTextArea();
+		logArea.append("rEvolution is about to start...");
 		
 		scroll = new JScrollPane(logArea);
 		
