@@ -71,7 +71,7 @@ public class DiffWordCountTool implements Tool, ToolThatPersists {
 	}
 
 	public String getName() {
-		return "junit-test-counter";
+		return "diff-word-count " + patterns;
 	}
 
 }
