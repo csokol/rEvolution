@@ -23,10 +23,9 @@ public class VisualizationFactory {
 			
 			PrefixedConfig specificConfig = new PrefixedConfig(config, visualizationConfigName(counter));
 			Visualization visualization = getSpecificFactoryFor(visualizationName).build(specificConfig);
-			int height = config.asInt("height");
-			int width = config.asInt("width");
-			File file = new File(config.asString("width"));
-			
+			int height = specificConfig.asInt("height");
+			int width = specificConfig.asInt("width");
+			File file = new File(specificConfig.asString("file"));
 			
 			all.add(new VisualizationPlusConfigs(visualization, file, width, height));
 			
