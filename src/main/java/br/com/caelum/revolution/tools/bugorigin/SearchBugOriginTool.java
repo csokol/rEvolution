@@ -121,8 +121,10 @@ public class SearchBugOriginTool implements Tool, ToolThatPersists,
 
 	private boolean noKeywordsIn(Commit commit) {
 		for (String keyword : keywords) {
-			if (commit.getMessage().contains(keyword))
+			if (commit.getMessage().contains(keyword)) {
+				log.info("Found a commit that fixed a bug because of the word '" + keyword + "'");
 				return true;
+			}
 		}
 		return false;
 	}

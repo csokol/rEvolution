@@ -45,7 +45,10 @@ public class DefaultAnalyzer implements Analyzer {
 			try {
 				log.info("--------------------------");
 				log.info("Starting analyzing changeset " + changeSet.getId());
+				
 				CommitData data = scm.detail(changeSet.getId());
+				log.info("Message: " + data.getMessage());
+				
 				BuildResult currentBuild = build(changeSet);
 
 				persistence.beginTransaction();
