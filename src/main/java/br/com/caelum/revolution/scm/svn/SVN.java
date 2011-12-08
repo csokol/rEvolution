@@ -35,22 +35,26 @@ import br.com.caelum.revolution.scm.CommitData;
 import br.com.caelum.revolution.scm.DiffData;
 import br.com.caelum.revolution.scm.SCM;
 import br.com.caelum.revolution.scm.SCMException;
+import br.com.caelum.revolution.util.io.IOUtils;
 
 public class SVN implements SCM {
 
-	private final String path;
+	private final String repoPath;
 	private SVNRepository repository;
 	private String username;
 	private String password;
 	private final SVNDiffParser diffParser;
 	private final String tempPath;
+	private final IOUtils io;
+	private String sourceCodePath;
 
-	public SVN(String path, String tempPath, SVNDiffParser diffParser) {
+	public SVN(String path, String tempPath, SVNDiffParser diffParser, IOUtils io) {
 		this.tempPath = tempPath;
 		this.diffParser = diffParser;
+		this.io = io;
 		setup();
 
-		this.path = path;
+		this.repoPath = path;
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(path));
 		} catch (SVNException e) {
@@ -58,14 +62,15 @@ public class SVN implements SCM {
 		}
 	}
 
-	public SVN(String path, String tempPath, String username, String password, SVNDiffParser diffParser) {
+	public SVN(String path, String tempPath, String username, String password, SVNDiffParser diffParser, IOUtils io) {
 		setup();
 
+		this.io = io;
 		this.tempPath = tempPath;
 		this.diffParser = diffParser;
 		this.username = username;
 		this.password = password;
-		this.path = path;
+		this.repoPath = path;
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(path));
 			repository.setAuthenticationManager(createAuthManager());
@@ -83,8 +88,9 @@ public class SVN implements SCM {
 		List<ChangeSet> cs = new ArrayList<ChangeSet>();
 
 		try {
-			List<SVNLogEntry> log = (List<SVNLogEntry>) repository.log(new String[] { "" }, null, 0, -1, true, true);
+			List<SVNLogEntry> log = (List<SVNLogEntry>) repository.log(null, null, 0, -1, true, true);
 
+			System.out.println("tamanho da lista " + log.size());
 			for (SVNLogEntry entry : log) {
 				cs.add(new ChangeSet(String.valueOf(entry.getRevision()), convert(entry.getDate())));
 			}
@@ -104,11 +110,16 @@ public class SVN implements SCM {
 
 	public String goTo(String id) {
 		try {
-			String destinationPath = tempPath + "\\" + id;
-			SVNUpdateClient updateClient = SVNClientManager.newInstance().getUpdateClient();
-			updateClient.setIgnoreExternals( false );
-			updateClient.doCheckout(SVNURL.parseURIDecoded(path), new File(destinationPath) , SVNRevision.create(Long.parseLong(id)), SVNRevision.create(Long.parseLong(id)), SVNDepth.UNKNOWN, true);
+			String destinationPath = tempPath;
+			io.removeDirectory(new File(destinationPath));
 			
+			SVNUpdateClient updateClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient();
+			updateClient.setIgnoreExternals( false );
+			System.out.println("checking out id " + id);
+			updateClient.doCheckout(SVNURL.parseURIDecoded(repoPath), new File(destinationPath) , SVNRevision.create(Long.parseLong(id)), SVNRevision.create(Long.parseLong(id)), SVNDepth.INFINITY, true);
+			System.out.println("done in " + destinationPath);
+			
+			sourceCodePath = destinationPath;
 			return destinationPath;
 		}
 		catch(Exception e) {
@@ -120,10 +131,11 @@ public class SVN implements SCM {
 	public CommitData detail(String id) {
 
 		try {
+			System.out.println("Trying to get info about " + id);
 			SVNLogEntry entry = ((List<SVNLogEntry>) repository.log(
-					new String[] { "" }, null, Long.parseLong(id),
+					null, null, Long.parseLong(id),
 					Long.parseLong(id), true, true)).get(0);
-
+			System.out.println("Done trying to get info about " + id);
 			CommitData commitData = generateCommitData(id, entry);
 			getDiffInfo(id, entry, commitData);
 
@@ -162,13 +174,13 @@ public class SVN implements SCM {
 	}
 
 	private String diffOn(SVNLogEntryPath change, String id) {
-		return doDiff(path, change.getPath(), Long.parseLong(id) - 1, Long.parseLong(id));
+		return doDiff(repoPath, change.getPath(), Long.parseLong(id) - 1, Long.parseLong(id));
 	}
 
 	private String doDiff(final String url, final String filePath,
 			final long revision1, final long revision2) {
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
-		SVNDiffClient diffClient = new SVNDiffClient(username == null ? createAuthManager() : null, null);
+		SVNDiffClient diffClient = new SVNDiffClient(repository.getAuthenticationManager(), null);
 
 		try {
 			diffClient.doDiff(SVNURL.parseURIEncoded(url + filePath),
@@ -205,16 +217,16 @@ public class SVN implements SCM {
 		}
 	}
 
-	public String getPath() {
-		return path;
+	public String getSourceCodePath() {
+		return sourceCodePath;
 	}
 
 	public String blame(String id, String file, int line) {
 		try {
-			SVNLogClient logClient = SVNClientManager.newInstance().getLogClient();
+			SVNLogClient logClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getLogClient();
 			
 			SVNBlameHandler blamer = new SVNBlameHandler(line-1);
-			logClient.doAnnotate(SVNURL.parseURIDecoded(path + file), SVNRevision.UNDEFINED, SVNRevision.create(0), SVNRevision.create(Long.parseLong(id)), blamer);
+			logClient.doAnnotate(SVNURL.parseURIDecoded(repoPath + file), SVNRevision.UNDEFINED, SVNRevision.create(0), SVNRevision.create(Long.parseLong(id)), blamer);
 			
 			return blamer.getRevision();
 		}

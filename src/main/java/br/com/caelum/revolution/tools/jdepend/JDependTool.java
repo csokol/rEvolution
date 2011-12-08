@@ -9,10 +9,11 @@ import br.com.caelum.revolution.builds.BuildResult;
 import br.com.caelum.revolution.domain.Commit;
 import br.com.caelum.revolution.executor.CommandExecutor;
 import br.com.caelum.revolution.persistence.ToolThatPersists;
+import br.com.caelum.revolution.scm.GoToChangeSet;
 import br.com.caelum.revolution.tools.Tool;
 import br.com.caelum.revolution.tools.ToolException;
 
-
+@GoToChangeSet
 public class JDependTool implements Tool, ToolThatPersists {
 
 	private final CommandExecutor executor;

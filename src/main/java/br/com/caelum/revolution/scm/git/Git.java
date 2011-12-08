@@ -94,7 +94,7 @@ public class Git implements SCM {
 		return blameParser.getHash(response);
 	}
 
-	public String getPath() {
+	public String getSourceCodePath() {
 		return repository;
 	}
 

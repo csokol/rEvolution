@@ -71,7 +71,16 @@ public class DiffWordCountTool implements Tool, ToolThatPersists {
 	}
 
 	public String getName() {
-		return "diff-word-count " + patterns;
+		return "diff-word-count " + printPatterns();
 	}
+
+	private String printPatterns() {
+		String result = "";
+		for(String pattern : patterns) {
+			result += pattern + " ";
+		}
+		return result;
+	}
+
 
 }

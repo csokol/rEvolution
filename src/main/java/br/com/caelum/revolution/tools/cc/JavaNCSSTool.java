@@ -37,7 +37,7 @@ public class JavaNCSSTool implements Tool, ToolThatPersists, ToolThatUsesSCM {
 
 		exec.setEnvironmentVar("classpath", javancssLib);
 		String result = exec.execute(
-				"javancss -object -xml -recursive " + scm.getPath(),
+				"javancss -object -xml -recursive " + scm.getSourceCodePath(),
 				javancssJarPath);
 
 		ParsedJavaNCSS parsedResult = parser.parse(result);

@@ -7,12 +7,13 @@ import org.hibernate.Session;
 import br.com.caelum.revolution.builds.BuildResult;
 import br.com.caelum.revolution.domain.Commit;
 import br.com.caelum.revolution.persistence.ToolThatPersists;
+import br.com.caelum.revolution.scm.GoToChangeSet;
 import br.com.caelum.revolution.scm.SCM;
 import br.com.caelum.revolution.scm.ToolThatUsesSCM;
 import br.com.caelum.revolution.tools.Tool;
 import br.com.caelum.revolution.tools.ToolException;
 
-
+@GoToChangeSet
 public class NumberOfFilesTool implements Tool, ToolThatPersists, ToolThatUsesSCM {
 
 	private String extension;
@@ -27,7 +28,7 @@ public class NumberOfFilesTool implements Tool, ToolThatPersists, ToolThatUsesSC
 		try {
 			NumberOfFilesPerCommit result = new NumberOfFilesPerCommit();
 			result.setCommit(commit);
-			result.setQty(countFiles(scm.getPath()));
+			result.setQty(countFiles(scm.getSourceCodePath()));
 			
 			session.save(result);
 		}

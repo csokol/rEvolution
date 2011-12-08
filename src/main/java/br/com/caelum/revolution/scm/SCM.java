@@ -11,6 +11,6 @@ public interface SCM {
 	CommitData detail(String id);
 	String sourceOf(String hash, String fileName);
 	
-	String getPath();
+	String getSourceCodePath();
 	String blame(String commitId, String file, int line);
 }
