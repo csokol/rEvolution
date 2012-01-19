@@ -1,11 +1,7 @@
-package br.com.caelum.revolution.gui.commandline;
+package br.com.caelum.revolution.analyzers;
 
 import java.util.List;
 
-import br.com.caelum.revolution.analyzers.Analyzer;
-import br.com.caelum.revolution.analyzers.AnalyzerRunner;
-import br.com.caelum.revolution.analyzers.DefaultAnalyzer;
-import br.com.caelum.revolution.analyzers.DefaultAnalyzerRunner;
 import br.com.caelum.revolution.builds.Build;
 import br.com.caelum.revolution.builds.BuildFactory;
 import br.com.caelum.revolution.changesets.ChangeSetCollection;
