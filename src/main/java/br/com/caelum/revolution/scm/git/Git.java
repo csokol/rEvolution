@@ -67,11 +67,11 @@ public class Git implements SCM {
 		try {
 			String response = exec.execute("git show "
 					+ id
-					+ " --pretty=format:<Commit><commitId>%H</commitId><author><![CDATA[%an]]></author><email>![CDATA[%ae]]</email><date>%ai</date><message><![CDATA[%s]]></message></Commit>", getRepoPath());
+					+ " --pretty=format:<Commit><commitId>%H</commitId><author><![CDATA[%an]]></author><email><![CDATA[%ae]]></email><date>%ai</date><message><![CDATA[%s]]></message></Commit>", getRepoPath());
 			XStream xs = new XStream(new DomDriver());
 			xs.alias("Commit", CommitData.class);
 			CommitData parsedCommit = (CommitData) xs.fromXML(response.substring(0,
-					response.indexOf("</Commit>") + 9).replaceAll("&", "&amp;"));
+					response.indexOf("</Commit>") + 9));
 			parsedCommit.setDiff(response.substring(response.indexOf("</Commit>") + 9));
 			
 			String priorCommit = exec.execute("git log " + id + "^1 --pretty=format:%H -n 1", getRepoPath());
